@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/screen/home_screen.dart';
-import 'package:todolist/screen/home_screen.dart';
 
 class CategoriScreen extends StatefulWidget {
   const CategoriScreen({super.key});
@@ -14,7 +13,55 @@ class _CategoriScreenState extends State<CategoriScreen> {
   _homeFormDialog(BuildContext context){
     return showDialog(context: context, barrierDismissible: true, builder: (param){
     return AlertDialog(
+      actions: <Widget>[
+        TextButton(
+
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.red),
+            foregroundColor: MaterialStateProperty.all(
+                Colors.white,
+            ),
+          ),
+
+          onPressed: () {
+            print('Button cancel pressed!');
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
+
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+            foregroundColor: MaterialStateProperty.all(
+              Colors.white,
+            ),
+          ),
+
+          onPressed: () {
+            print('Button cancel pressed!');
+          },
+          child: Text('Save'),
+        ),
+      ],
       title: Text('Catelories Form'),
+      content: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Write a categories',
+                labelText: 'Category',
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Write a Description',
+                labelText: 'Description',
+              ),
+              ),
+          ],
+        ),
+      ),
     );
     });
   }
