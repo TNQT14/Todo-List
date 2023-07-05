@@ -43,8 +43,8 @@ class _CategoriScreenState extends State<CategoriScreen> {
           child: Text('Save'),
         ),
       ],
-      title: Text('Catelories Form'),
-      content: SingleChildScrollView(
+      title: const Text('Catelories Form'),
+      content: const SingleChildScrollView(
         child: Column(
           children: <Widget>[
             TextField(
