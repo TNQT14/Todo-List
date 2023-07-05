@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('TodoList'),
       ),
       drawer: DrawerNavigation(),
-      body: Text('Welcome to App'),
+      body: Center(child: Text('Welcome to App'),),
       floatingActionButton: FloatingActionButton(onPressed: () {},
       child: Icon(Icons.add),),
     );
