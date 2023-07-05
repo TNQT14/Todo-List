@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/helpers/drawer_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('TodoList'),
       ),
+      drawer: DrawerNavigation(),
       body: Text('Welcome to App'),
       floatingActionButton: FloatingActionButton(onPressed: () {},
       child: Icon(Icons.add),),
