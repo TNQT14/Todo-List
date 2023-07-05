@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/screen/home_screen.dart';
+import 'package:todolist/screen/home_screen.dart';
 
 class CategoriScreen extends StatefulWidget {
   const CategoriScreen({super.key});
@@ -9,6 +10,15 @@ class CategoriScreen extends StatefulWidget {
 }
 
 class _CategoriScreenState extends State<CategoriScreen> {
+
+  _homeFormDialog(BuildContext context){
+    return showDialog(context: context, barrierDismissible: true, builder: (param){
+    return AlertDialog(
+      title: Text('Catelories Form'),
+    );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +31,9 @@ class _CategoriScreenState extends State<CategoriScreen> {
         title: Text('Categories'),
       ),
       body: Center(child: Text('Welcom to Categories')),
-      floatingActionButton: FloatingActionButton(onPressed: (){},
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        _homeFormDialog(context);
+      },
       child: Icon(Icons.add),),
     );
   }
