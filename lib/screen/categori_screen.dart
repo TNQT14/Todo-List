@@ -123,7 +123,10 @@ class _CategoriScreenState extends State<CategoriScreen> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(_cateloryList[index]?.name ?? 'null'),
+                  // Text(_cateloryList[index]?.id?.toString() ?? 'Ảo thật đấy'),
+                  // Text(_cateloryList[index]?.name ?? 'null'),
+                  Text('${_cateloryList[index]?.id ?? 'null'}.${_cateloryList[index]?.name?.toString() ?? 'Ảo thật đấy'}'),
+
                   IconButton(onPressed: (){
                     //Process delete button late
                   },
