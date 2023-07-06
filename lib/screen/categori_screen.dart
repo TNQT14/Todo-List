@@ -22,20 +22,19 @@ class _CategoriScreenState extends State<CategoriScreen> {
     return showDialog(context: context, barrierDismissible: true, builder: (param){
     return AlertDialog(
       actions: <Widget>[
+        //Cancel Button
         TextButton(
-
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.red),
             foregroundColor: MaterialStateProperty.all(
                 Colors.white,
             ),
           ),
-
           onPressed: () {
-
           },
           child: Text('Cancel'),
         ),
+        //Save Button
         TextButton(
 
           style: ButtonStyle(
@@ -44,10 +43,12 @@ class _CategoriScreenState extends State<CategoriScreen> {
               Colors.white,
             ),
           ),
-          onPressed: () {
+          onPressed: () async{
             _category.name = _categoriesNameController.text;
             _category.description = _categoriesDescriptionController.text;
-            _categoriesService.saveCategory(_category);
+
+            var result = await _categoriesService.saveCategory(_category);
+            print(result);
           },
           child: Text('Save'),
         ),
