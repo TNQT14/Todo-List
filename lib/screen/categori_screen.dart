@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/screen/home_screen.dart';
+import 'package:todolist/model/category.dart';
+import 'package:todolist/services/categories_service.dart';
 
 class CategoriScreen extends StatefulWidget {
   const CategoriScreen({super.key});
 
   @override
   State<CategoriScreen> createState() => _CategoriScreenState();
+
 }
 
 class _CategoriScreenState extends State<CategoriScreen> {
 
-  var _categoriesNameController = TextEditingController();
-  var _categoriesDescriptionController = TextEditingController();
+  final _categoriesNameController = TextEditingController();
+  final _categoriesDescriptionController = TextEditingController();
+  final _category = Category();
+  final _categoriesService = CategoryService();
 
   _homeFormDialog(BuildContext context){
     return showDialog(context: context, barrierDismissible: true, builder: (param){
@@ -27,9 +32,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
           ),
 
           onPressed: () {
-            print('Categories name: $_categoriesNameController');
-            print('Categories description: $_categoriesDescriptionController');
-            print('Button save pressed!');
+
           },
           child: Text('Cancel'),
         ),
@@ -41,11 +44,10 @@ class _CategoriScreenState extends State<CategoriScreen> {
               Colors.white,
             ),
           ),
-
           onPressed: () {
-            print('Categories name: ${_categoriesNameController.text}');
-            print('Categories description: ${_categoriesDescriptionController.text}');
-            print('Button save pressed!');
+            _category.name = _categoriesNameController.text;
+            _category.description = _categoriesDescriptionController.text;
+            _categoriesService.saveCategory(_category);
           },
           child: Text('Save'),
         ),
