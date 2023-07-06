@@ -10,6 +10,9 @@ class CategoriScreen extends StatefulWidget {
 
 class _CategoriScreenState extends State<CategoriScreen> {
 
+  var _categoriesNameController = TextEditingController();
+  var _categoriesDescriptionController = TextEditingController();
+
   _homeFormDialog(BuildContext context){
     return showDialog(context: context, barrierDismissible: true, builder: (param){
     return AlertDialog(
@@ -24,7 +27,9 @@ class _CategoriScreenState extends State<CategoriScreen> {
           ),
 
           onPressed: () {
-            print('Button cancel pressed!');
+            print('Categories name: $_categoriesNameController');
+            print('Categories description: $_categoriesDescriptionController');
+            print('Button save pressed!');
           },
           child: Text('Cancel'),
         ),
@@ -38,22 +43,26 @@ class _CategoriScreenState extends State<CategoriScreen> {
           ),
 
           onPressed: () {
-            print('Button cancel pressed!');
+            print('Categories name: ${_categoriesNameController.text}');
+            print('Categories description: ${_categoriesDescriptionController.text}');
+            print('Button save pressed!');
           },
           child: Text('Save'),
         ),
       ],
       title: const Text('Catelories Form'),
-      content: const SingleChildScrollView(
+      content: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             TextField(
+              controller: _categoriesNameController,
               decoration: InputDecoration(
                 hintText: 'Write a categories',
                 labelText: 'Category',
               ),
             ),
             TextField(
+              controller: _categoriesDescriptionController,
               decoration: InputDecoration(
                 hintText: 'Write a Description',
                 labelText: 'Description',
