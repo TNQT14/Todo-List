@@ -70,11 +70,12 @@ class _CategoriScreenState extends State<CategoriScreen> {
 
             var result = await _categoriesService.saveCategory(_category);
             print(result);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
           },
           child: Text('Save'),
         ),
       ],
-      title: const Text('Catelories Form'),
+      title: const Text('Categories Form'),
       content: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -105,25 +106,31 @@ class _CategoriScreenState extends State<CategoriScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen())),
+          onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeScreen())),
           color: Colors.white,
         ),
         title: Text('Categories'),
       ),
-      body: ListView.builder(itemCount: _cateloryList.length ,itemBuilder: (context, index){
-        return Card(
-          child: ListTile(
-            leading: IconButton(icon: Icon(Icons.edit), onPressed: (){
-              //Process edit button late
-            },),
-            title: Row(
-              children: <Widget>[
-                Text(_cateloryList[index]?.name ?? 'null'),
-                IconButton(onPressed: (){
-                  //Process delete button late
-                },
-                  icon: Icon(Icons.delete),)
-              ],
+      body: ListView.builder(itemCount: _cateloryList.length, itemBuilder: (context, index){
+        return Padding(
+          padding: EdgeInsets.only(top: 2.0, left: 16.0, right: 16.0),
+          child: Card(
+            elevation: 4.0,
+            child: ListTile(
+              leading: IconButton(icon: Icon(Icons.edit), onPressed: (){
+                //Process edit button late
+              },),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(_cateloryList[index]?.name ?? 'null'),
+                  IconButton(onPressed: (){
+                    //Process delete button late
+                  },
+                    icon: Icon(Icons.delete), color: Colors.red,)
+                ],
+              ),
+              subtitle: Text(_cateloryList[index]?.description ?? 'null'),
             ),
           ),
         );
