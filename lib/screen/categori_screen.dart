@@ -17,6 +17,28 @@ class _CategoriScreenState extends State<CategoriScreen> {
   final _categoriesDescriptionController = TextEditingController();
   final _category = Category();
   final _categoriesService = CategoryService();
+  List<Category> _cateloryList = <Category>[];
+
+  getAllCategories() async{
+    _cateloryList = <Category>[];
+    var categories = await _categoriesService.readCategories();
+
+    categories.forEach((category){
+      setState(() {
+        var categoryModel = Category();
+        categoryModel.id = category['id'];
+        categoryModel.name = category['name'];
+        categoryModel.description = category['description'];
+        _cateloryList.add(categoryModel);
+      });
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    getAllCategories();
+  }
 
   _homeFormDialog(BuildContext context){
     return showDialog(context: context, barrierDismissible: true, builder: (param){
@@ -36,7 +58,6 @@ class _CategoriScreenState extends State<CategoriScreen> {
         ),
         //Save Button
         TextButton(
-
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.blue),
             foregroundColor: MaterialStateProperty.all(
@@ -89,7 +110,24 @@ class _CategoriScreenState extends State<CategoriScreen> {
         ),
         title: Text('Categories'),
       ),
-      body: Center(child: Text('Welcom to Categories')),
+      body: ListView.builder(itemCount: _cateloryList.length ,itemBuilder: (context, index){
+        return Card(
+          child: ListTile(
+            leading: IconButton(icon: Icon(Icons.edit), onPressed: (){
+              //Process edit button late
+            },),
+            title: Row(
+              children: <Widget>[
+                Text(_cateloryList[index]?.name ?? 'null'),
+                IconButton(onPressed: (){
+                  //Process delete button late
+                },
+                  icon: Icon(Icons.delete),)
+              ],
+            ),
+          ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(onPressed: () {
         _homeFormDialog(context);
       },

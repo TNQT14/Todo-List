@@ -2,18 +2,20 @@ import 'package:todolist/model/category.dart';
 import 'package:todolist/repositories/reponsitory.dart';
 
 class CategoryService{
-  saveCategory(Category category){
     late Reponsitory _reponsitory;
 
     CategoryService(){
       _reponsitory = Reponsitory();
     }
 
-    saveCategory(Category category){
-      return _reponsitory?.insertData('categories', category.categoryMap());
+    saveCategory(Category category) async{
+      print('Category id: ${category.id}');
+      print('Category name: ${category.name}');
+      print('Category description: ${category.description}');
+      return await _reponsitory.insertData('categories', category.categoryMap());
     }
 
-    print(category.name);
-    print(category.description);
-  }
+    readCategories() async{
+      return await _reponsitory.readData('categories');
+    }
 }

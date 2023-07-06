@@ -19,7 +19,13 @@ class Reponsitory{
   //Insert data into table
   insertData(table, data) async{
     var connection = await database;
-    return await connection?.insert(table, data);
+    return await connection!.insert(table, data);
+  }
+
+  //Read data into table
+  readData(table) async{
+    var connection = await database;
+    return await connection!.query(table);
   }
 
 }
