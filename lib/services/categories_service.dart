@@ -18,4 +18,8 @@ class CategoryService{
     readCategories() async{
       return await _reponsitory.readData('categories');
     }
+
+  readCategoyById(categoryId) async{
+      return await _reponsitory.readDataById('categories',categoryId);
+  }
 }

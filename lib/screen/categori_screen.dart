@@ -17,7 +17,14 @@ class _CategoriScreenState extends State<CategoriScreen> {
   final _categoriesDescriptionController = TextEditingController();
   final _category = Category();
   final _categoriesService = CategoryService();
+
+  final _editcategoriesNameController = TextEditingController();
+  final _editcategoriesDescriptionController = TextEditingController();
+  final _editcategory = Category();
+  final _editcategoriesService = CategoryService();
   List<Category> _cateloryList = <Category>[];
+
+  var category;
 
   getAllCategories() async{
     _cateloryList = <Category>[];
@@ -38,6 +45,15 @@ class _CategoriScreenState extends State<CategoriScreen> {
   void initState(){
     super.initState();
     getAllCategories();
+  }
+
+  _editCategory(BuildContext context, categoryId) async{
+    category = await _categoriesService.readCategoyById(categoryId);
+    setState(() {
+      _editcategoriesNameController.text = category[0]['name']??'No name';
+      _categoriesDescriptionController.text = category[0]['description']??'No description';
+    });
+    _editFormDialog(context);
   }
 
   _homeFormDialog(BuildContext context){
@@ -69,8 +85,13 @@ class _CategoriScreenState extends State<CategoriScreen> {
             _category.description = _categoriesDescriptionController.text;
 
             var result = await _categoriesService.saveCategory(_category);
-            print(result);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+            // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+            if(result>0)
+              {
+                print(result);
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+              }
           },
           child: Text('Save'),
         ),
@@ -100,6 +121,71 @@ class _CategoriScreenState extends State<CategoriScreen> {
     });
   }
 
+  _editFormDialog(BuildContext context){
+    return showDialog(context: context, barrierDismissible: true, builder: (param){
+      return AlertDialog(
+        actions: <Widget>[
+          //Cancel Button
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.red),
+              foregroundColor: MaterialStateProperty.all(
+                Colors.white,
+              ),
+            ),
+            onPressed: () {
+            },
+            child: Text('Cancel'),
+          ),
+          //Save Button
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.blue),
+              foregroundColor: MaterialStateProperty.all(
+                Colors.white,
+              ),
+            ),
+            onPressed: () async{
+              _category.name = _editcategoriesNameController.text;
+              _category.description = _editcategoriesDescriptionController.text;
+
+              var result = await _categoriesService.saveCategory(_category);
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+              if(result>0)
+              {
+                print(result);
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+              }
+            },
+            child: Text('Update'),
+          ),
+        ],
+        title: const Text('Edit Categories Form'),
+        content: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: _editcategoriesNameController,
+                decoration: InputDecoration(
+                  hintText: 'Write a categories',
+                  labelText: 'Category',
+                ),
+              ),
+              TextField(
+                controller: _editcategoriesDescriptionController,
+                decoration: InputDecoration(
+                  hintText: 'Write a Description',
+                  labelText: 'Description',
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,12 +205,11 @@ class _CategoriScreenState extends State<CategoriScreen> {
             child: ListTile(
               leading: IconButton(icon: Icon(Icons.edit), onPressed: (){
                 //Process edit button late
+                _editCategory(context, _cateloryList[index].id);
               },),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  // Text(_cateloryList[index]?.id?.toString() ?? 'Ảo thật đấy'),
-                  // Text(_cateloryList[index]?.name ?? 'null'),
                   Text('${_cateloryList[index]?.id ?? 'null'}.${_cateloryList[index]?.name?.toString() ?? 'Ảo thật đấy'}'),
 
                   IconButton(onPressed: (){
