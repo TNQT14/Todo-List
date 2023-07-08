@@ -24,6 +24,8 @@ class _CategoriScreenState extends State<CategoriScreen> {
   final _editcategoriesService = CategoryService();
   List<Category> _cateloryList = <Category>[];
 
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+
   var category;
 
   getAllCategories() async{
@@ -40,6 +42,8 @@ class _CategoriScreenState extends State<CategoriScreen> {
       });
     });
   }
+
+
 
   @override
   void initState(){
@@ -69,6 +73,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
             ),
           ),
           onPressed: () {
+            Navigator.pop(context);
           },
           child: Text('Cancel'),
         ),
@@ -88,9 +93,10 @@ class _CategoriScreenState extends State<CategoriScreen> {
             // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
             if(result>0)
               {
+                _showSuccessSnackBar('Add successfull');
                 print(result);
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+                getAllCategories();
               }
           },
           child: Text('Save'),
@@ -134,6 +140,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
               ),
             ),
             onPressed: () {
+              Navigator.pop(context);
             },
             child: Text('Cancel'),
           ),
@@ -154,10 +161,12 @@ class _CategoriScreenState extends State<CategoriScreen> {
               // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
               if(result>0)
               {
-                getAllCategories();
+                _showSuccessSnackBar('Update succesful');
                 print(result);
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+                getAllCategories();
+
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
               }
             },
             child: Text('Update'),
@@ -188,9 +197,21 @@ class _CategoriScreenState extends State<CategoriScreen> {
     });
   }
 
+  _showSuccessSnackBar(message){
+    // var _snackBar = SnackBar(content: message);
+    print('Call _showSuccessSnackBar');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _globalKey,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
