@@ -17,6 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: DrawerNavigation(),
       body: Center(child: Text('Welcome to App'),),
+      floatingActionButton: FloatingActionButton(onPressed: () {},
+        child: Icon(Icons.add),),
     );
   }
 }

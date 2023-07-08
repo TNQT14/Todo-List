@@ -36,7 +36,6 @@ class _CategoriScreenState extends State<CategoriScreen> {
     var categories = await _categoriesService.readCategories();
 
     setState(() {
-      // print('categoryModel.id ');
     });
 
     categories.forEach((category){
