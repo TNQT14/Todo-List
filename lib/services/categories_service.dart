@@ -22,4 +22,8 @@ class CategoryService{
   readCategoyById(categoryId) async{
       return await _reponsitory.readDataById('categories',categoryId);
   }
+
+  updateCategory(Category category) async{
+    return await _reponsitory.updateData('categories',category.categoryMap());
+  }
 }

@@ -51,7 +51,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
     category = await _categoriesService.readCategoyById(categoryId);
     setState(() {
       _editcategoriesNameController.text = category[0]['name']??'No name';
-      _categoriesDescriptionController.text = category[0]['description']??'No description';
+      _editcategoriesDescriptionController.text = category[0]['description']??'No description';
     });
     _editFormDialog(context);
   }
@@ -137,7 +137,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
             },
             child: Text('Cancel'),
           ),
-          //Save Button
+          //Update Button
           TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.blue),
@@ -146,13 +146,15 @@ class _CategoriScreenState extends State<CategoriScreen> {
               ),
             ),
             onPressed: () async{
+              _category.id = category[0]['id'];
               _category.name = _editcategoriesNameController.text;
               _category.description = _editcategoriesDescriptionController.text;
 
-              var result = await _categoriesService.saveCategory(_category);
+              var result = await _categoriesService.updateCategory(_category);
               // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
               if(result>0)
               {
+                getAllCategories();
                 print(result);
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
