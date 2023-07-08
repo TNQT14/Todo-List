@@ -24,6 +24,9 @@ class _CategoriScreenState extends State<CategoriScreen> {
   final _editcategoriesService = CategoryService();
   List<Category> _cateloryList = <Category>[];
 
+  final _deletecategoriesNameController = TextEditingController();
+  final _deletecategoriesDescriptionController = TextEditingController();
+
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
   var category;
@@ -32,6 +35,10 @@ class _CategoriScreenState extends State<CategoriScreen> {
     _cateloryList = <Category>[];
     var categories = await _categoriesService.readCategories();
 
+    // setState(() {
+    //   print('categoryModel.id ');
+    // });
+
     categories.forEach((category){
       setState(() {
         var categoryModel = Category();
@@ -39,11 +46,10 @@ class _CategoriScreenState extends State<CategoriScreen> {
         categoryModel.name = category['name'];
         categoryModel.description = category['description'];
         _cateloryList.add(categoryModel);
+        // print('categoryModel.id = ${categoryModel.id}');
       });
     });
   }
-
-
 
   @override
   void initState(){
@@ -60,6 +66,18 @@ class _CategoriScreenState extends State<CategoriScreen> {
     _editFormDialog(context);
   }
 
+  _deleteCategory(BuildContext context, categoryId) async{
+    category = await _categoriesService.readCategoyById(categoryId);
+    setState(() {
+      _editcategoriesNameController.text = category[0]['name']??'No name';
+      _editcategoriesDescriptionController.text = category[0]['description']??'No description';
+    });
+    _deleteFormDialog(context);
+  }
+
+
+
+  //Show Form
   _showFormDialog(BuildContext context){
     return showDialog(context: context, barrierDismissible: true, builder: (param){
     return AlertDialog(
@@ -86,17 +104,20 @@ class _CategoriScreenState extends State<CategoriScreen> {
             ),
           ),
           onPressed: () async{
+            print('Check _category');
             _category.name = _categoriesNameController.text;
             _category.description = _categoriesDescriptionController.text;
 
+            print('Check saveCategory');
             var result = await _categoriesService.saveCategory(_category);
+            print('complete saveCategory');
             // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
             if(result>0)
               {
                 _showSuccessSnackBar('Add successfull');
-                print(result);
-                Navigator.pop(context);
+                print('Kết quả $result');
                 getAllCategories();
+                Navigator.pop(context);
               }
           },
           child: Text('Save'),
@@ -163,7 +184,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
               if(result>0)
               {
                 _showSuccessSnackBar('Update succesful');
-                print(result);
+                print('Kết quả $result');
                 Navigator.pop(context);
                 getAllCategories();
 
@@ -198,6 +219,61 @@ class _CategoriScreenState extends State<CategoriScreen> {
     });
   }
 
+  //Delete Form
+  _deleteFormDialog(BuildContext context){
+    return showDialog(context: context, barrierDismissible: true, builder: (param){
+      return AlertDialog(
+        actions: <Widget>[
+          //Cancel Button
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.blue),
+              foregroundColor: MaterialStateProperty.all(
+                Colors.white,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+          //Delete Button
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.red),
+              foregroundColor: MaterialStateProperty.all(
+                Colors.white,
+              ),
+            ),
+            onPressed: () async{
+              _category.id = category[0]['id'];
+              // _category.name = _deletecategoriesNameController.text;
+              // _category.description = _deletecategoriesDescriptionController.text;
+              //
+              var result = await _categoriesService.deleteCategory(_category.id);
+              // // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+
+              if(result>=0)
+              {
+                print('Kết quả $result');
+                print('Call Navigator.pop(context)');
+                getAllCategories();
+                print('Navigator.pop(context) success');
+                Navigator.pop(context);
+                _showSuccessSnackBar('Delete succesful');
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+                // print('Navigator.of(context) success');
+                // getAllCategories();
+              }
+            },
+            child: Text('Delete'),
+          ),
+        ],
+        title: const Text('Are you sure you want to delete this'),
+      );
+    });
+  }
+
   _showSuccessSnackBar(message){
     // var _snackBar = SnackBar(content: message);
     print('Call _showSuccessSnackBar');
@@ -228,7 +304,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
             elevation: 4.0,
             child: ListTile(
               leading: IconButton(icon: Icon(Icons.edit), onPressed: (){
-                //Process edit button late
+                //Process edit button
                 _editCategory(context, _cateloryList[index].id);
               },),
               title: Row(
@@ -238,6 +314,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
 
                   IconButton(onPressed: (){
                     //Process delete button late
+                    _deleteCategory(context, _cateloryList[index].id);
                   },
                     icon: Icon(Icons.delete), color: Colors.red,)
                 ],
