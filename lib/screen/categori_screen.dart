@@ -60,7 +60,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
     _editFormDialog(context);
   }
 
-  _homeFormDialog(BuildContext context){
+  _showFormDialog(BuildContext context){
     return showDialog(context: context, barrierDismissible: true, builder: (param){
     return AlertDialog(
       actions: <Widget>[
@@ -127,6 +127,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
     });
   }
 
+  //Edit Form
   _editFormDialog(BuildContext context){
     return showDialog(context: context, barrierDismissible: true, builder: (param){
       return AlertDialog(
@@ -247,7 +248,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
         );
       }),
       floatingActionButton: FloatingActionButton(onPressed: () {
-        _homeFormDialog(context);
+        _showFormDialog(context);
       },
       child: Icon(Icons.add),),
     );
