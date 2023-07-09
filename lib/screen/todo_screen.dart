@@ -135,24 +135,35 @@ class _TodoScreenState extends State<TodoScreen> {
             height: 20,
           ),
           ElevatedButton(
-              onPressed: () async {
-                var todoObject = Todo();
-
-                todoObject.title = todoTitleController.text;
-                todoObject.description = todoDescriptionController.text;
-                todoObject.category = _selectValue.toString();
-                todoObject.isFinished=0;
-                todoObject.todoDate = _todoDateController.text;
-
-                var _todoService = TodoService();
-                var result = await _todoService.saveTodo(todoObject);
-
-                if(result>0)
-                  _showSuccessSnackBar('Created');
-              },
+              onPressed: (todoTitleController.text.isNotEmpty &&
+                  todoDescriptionController.text.isNotEmpty &&
+                  _selectValue != null &&
+                  _todoDateController.text.isNotEmpty)
+                  ? () async {
+                  var todoObject = Todo();
+                  todoObject.title = todoTitleController.text;
+                  todoObject.description = todoDescriptionController.text;
+                  todoObject.category = _selectValue.toString();
+                  todoObject.isFinished=0;
+                  todoObject.todoDate = _todoDateController.text;
+                  var _todoService = TodoService();
+                  var result = await _todoService.saveTodo(todoObject);
+                  if(result>0)
+                    _showSuccessSnackBar('Created');
+              } : null             ,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue), // Màu nền khi nút không được nhấn
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ khi nút không được nhấn
+                // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue), // Màu nền khi nút không được nhấn
+                // foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ khi nút không được nhấn
+                // overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Màu nền khi nút được nhấn
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  (todoTitleController.text.isNotEmpty &&
+                      todoDescriptionController.text.isNotEmpty &&
+                      _selectValue != null &&
+                      _todoDateController.text.isNotEmpty)
+                      ? Colors.blue // Màu nền khi nút được nhấn
+                      : Colors.grey, // Màu xám khi nút không được nhấn
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ
                 overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Màu nền khi nút được nhấn
               ),
               child: Text('Save', style: TextStyle(color: Colors.white))),
