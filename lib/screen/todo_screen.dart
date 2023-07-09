@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:todolist/services/categories_service.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -8,14 +10,50 @@ class TodoScreen extends StatefulWidget {
 }
 
 class _TodoScreenState extends State<TodoScreen> {
+  var todoTitleController =TextEditingController();
+  var todoDescriptionController = TextEditingController();
+  var todoDateController = TextEditingController();
+
+
+  @override
+  void initState(){
+    super.initState();
+    _loadCategories();
+}
+
   var _selectValue;
-  var _categories;
+  List<DropdownMenuItem<String>> _categories = [];
+
+  _loadCategories() async {
+    var _categoriesService = CategoryService();
+    var categories = await _categoriesService.readCategories();
+
+
+    // _categories.forEach((category){
+    //   setState(() {
+    //     String categoryName = category['name'].toString();
+    //     _categories.add((DropdownMenuItem<String>(
+    //       child: Text(categoryName),
+    //       value: categoryName,
+    //     ))).toList();
+    //   });
+    // });
+
+    setState(() {
+      _categories = categories.map<DropdownMenuItem<String>>((category) {
+        String categoryName = category['name'].toString();
+        return DropdownMenuItem<String>(
+          child: Text(categoryName),
+          value: categoryName,
+        );
+      }).toList().cast<DropdownMenuItem<String>>();
+    });
+
+    print(_categories);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var todoTitleController =TextEditingController();
-    var todoDescriptionController = TextEditingController();
-    var todoDateController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -48,17 +86,21 @@ class _TodoScreenState extends State<TodoScreen> {
               )
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
           DropdownButtonFormField(
             value: _selectValue,
             items: _categories,
             hint: Text('Category'),
             onChanged: (value){
+              print('DropdownButtonFormField');
               setState(() {
                 _selectValue = value;
               });
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ElevatedButton(
