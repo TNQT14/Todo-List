@@ -15,4 +15,12 @@ class TodoService{
   readTodo() async{
     return await _reponsitory.readData('todo');
   }
+
+  readTodoById(todoId) async{
+    return await _reponsitory.readDataById('todo',todoId);
+  }
+
+  deleteTodo(todoId) async{
+    return await _reponsitory.deleteData('todo',todoId);
+  }
 }
