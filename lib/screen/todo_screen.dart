@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/services/categories_service.dart';
+import 'package:intl/intl.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -12,7 +13,7 @@ class TodoScreen extends StatefulWidget {
 class _TodoScreenState extends State<TodoScreen> {
   var todoTitleController =TextEditingController();
   var todoDescriptionController = TextEditingController();
-  var todoDateController = TextEditingController();
+  var _todoDateController = TextEditingController();
 
 
   @override
@@ -28,17 +29,6 @@ class _TodoScreenState extends State<TodoScreen> {
     var _categoriesService = CategoryService();
     var categories = await _categoriesService.readCategories();
 
-
-    // _categories.forEach((category){
-    //   setState(() {
-    //     String categoryName = category['name'].toString();
-    //     _categories.add((DropdownMenuItem<String>(
-    //       child: Text(categoryName),
-    //       value: categoryName,
-    //     ))).toList();
-    //   });
-    // });
-
     setState(() {
       _categories = categories.map<DropdownMenuItem<String>>((category) {
         String categoryName = category['name'].toString();
@@ -48,16 +38,32 @@ class _TodoScreenState extends State<TodoScreen> {
         );
       }).toList().cast<DropdownMenuItem<String>>();
     });
-
-    print(_categories);
   }
+
+  DateTime _dateTime = DateTime.now();
+
+  _selectedTodoDate(BuildContext context) async{
+    var _pickDate = await showDatePicker(context: context,
+        initialDate: _dateTime,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+
+    if(_pickDate !=null)
+      {
+        setState(() {
+          _dateTime=_pickDate;
+          _todoDateController.text = DateFormat('dd-MM-yyyy').format(_pickDate);
+        });
+      }
+  }
+
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('To do screen'),
+        title: const Text('To do screen'),
       ),
       body: Column(
         children: <Widget>[
@@ -76,12 +82,14 @@ class _TodoScreenState extends State<TodoScreen> {
             ),
           ),
           TextField(
-            controller: todoDateController,
+            controller: _todoDateController,
             decoration: InputDecoration(
               labelText: 'Date',
               hintText: 'Pick a Date',
               prefixIcon: InkWell(
-                onTap: (){},
+                onTap: (){
+                  _selectedTodoDate(context);
+                },
                 child: Icon(Icons.calendar_today),
               )
             ),
