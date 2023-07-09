@@ -26,9 +26,6 @@ class Reponsitory{
   //Insert data into table
   insertData(table, data) async{
     var connection = await database;
-    if (database != null)
-      print('Database is not null');
-    print("Check insertData");
     data.remove('id');
 
     return await connection!.insert(table, data);
@@ -37,10 +34,6 @@ class Reponsitory{
   //Read data into table
   readData(table) async{
     var connection = await database;
-    if(database != null)
-      print('DATABASE NOT NULL');
-    else
-      print('Database is null');
     return await connection!.query(table);
 
   }

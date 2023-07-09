@@ -1,7 +1,9 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/services/categories_service.dart';
 import 'package:intl/intl.dart';
+import 'package:todolist/services/todo_service.dart';
+import 'package:todolist/model/todo.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -14,6 +16,8 @@ class _TodoScreenState extends State<TodoScreen> {
   var todoTitleController =TextEditingController();
   var todoDescriptionController = TextEditingController();
   var _todoDateController = TextEditingController();
+
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
 
   @override
@@ -40,6 +44,17 @@ class _TodoScreenState extends State<TodoScreen> {
     });
   }
 
+  _showSuccessSnackBar(message){
+    // var _snackBar = SnackBar(content: message);
+    print('Call _showSuccessSnackBar');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   DateTime _dateTime = DateTime.now();
 
   _selectedTodoDate(BuildContext context) async{
@@ -62,6 +77,7 @@ class _TodoScreenState extends State<TodoScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      key: _globalKey,
       appBar: AppBar(
         title: const Text('To do screen'),
       ),
@@ -112,15 +128,30 @@ class _TodoScreenState extends State<TodoScreen> {
             height: 20,
           ),
           ElevatedButton(
-              onPressed: (){},
+              onPressed: () async {
+                var todoObject = Todo();
+
+                todoObject.title = todoTitleController.text;
+                todoObject.description = todoDescriptionController.text;
+                todoObject.category = _selectValue.toString();
+                todoObject.isFinished=0;
+                todoObject.todoDate = _todoDateController.text;
+
+                var _todoService = TodoService();
+                var result = await _todoService.saveTodo(todoObject);
+
+                if(result>0)
+                  _showSuccessSnackBar('Created');
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.blue), // Màu nền khi nút không được nhấn
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ khi nút không được nhấn
                 overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Màu nền khi nút được nhấn
               ),
-              child: Text('Save', style: TextStyle(color: Colors.white)))
+              child: Text('Save', style: TextStyle(color: Colors.white))),
         ],
       ),
     );
   }
 }
+

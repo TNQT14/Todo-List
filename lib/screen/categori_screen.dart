@@ -20,12 +20,12 @@ class _CategoriScreenState extends State<CategoriScreen> {
 
   final _editcategoriesNameController = TextEditingController();
   final _editcategoriesDescriptionController = TextEditingController();
-  final _editcategory = Category();
-  final _editcategoriesService = CategoryService();
+  // final _editcategory = Category();
+  // final _editcategoriesService = CategoryService();
   List<Category> _cateloryList = <Category>[];
 
-  final _deletecategoriesNameController = TextEditingController();
-  final _deletecategoriesDescriptionController = TextEditingController();
+  // final _deletecategoriesNameController = TextEditingController();
+  // final _deletecategoriesDescriptionController = TextEditingController();
 
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
@@ -309,7 +309,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('${_cateloryList[index]?.id ?? 'null'}.${_cateloryList[index]?.name?.toString() ?? 'Ảo thật đấy'}'),
+                  Text('${_cateloryList[index].id ?? 'null'}.${_cateloryList[index].name?.toString() ?? 'Ảo thật đấy'}'),
 
                   IconButton(onPressed: (){
                     //Process delete button late
@@ -318,7 +318,7 @@ class _CategoriScreenState extends State<CategoriScreen> {
                     icon: Icon(Icons.delete), color: Colors.red,)
                 ],
               ),
-              subtitle: Text(_cateloryList[index]?.description ?? 'null'),
+              subtitle: Text(_cateloryList[index].description ?? 'null'),
             ),
           ),
         );
