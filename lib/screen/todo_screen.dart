@@ -77,6 +77,9 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String todoName='';
+    String todoDescription='';
+    String todoDate='';
 
     return Scaffold(
       key: _globalKey,
@@ -92,6 +95,11 @@ class _TodoScreenState extends State<TodoScreen> {
         children: <Widget>[
           TextField(
             controller: todoTitleController,
+            onChanged: (value) {
+              setState(() {
+                todoName = value;
+              });
+            },
             decoration: InputDecoration(
               labelText: 'Title',
               hintText: 'Write Todo Title',
@@ -99,6 +107,11 @@ class _TodoScreenState extends State<TodoScreen> {
           ),
           TextField(
             controller: todoDescriptionController,
+            onChanged: (value) {
+              setState(() {
+                todoDescription = value;
+              });
+            },
             decoration: InputDecoration(
               labelText: 'Description',
               hintText: 'Write Todo Description',
@@ -106,6 +119,11 @@ class _TodoScreenState extends State<TodoScreen> {
           ),
           TextField(
             controller: _todoDateController,
+            onChanged: (value) {
+              setState(() {
+                todoDate = value;
+              });
+            },
             decoration: InputDecoration(
               labelText: 'Date',
               hintText: 'Pick a Date',
@@ -150,11 +168,8 @@ class _TodoScreenState extends State<TodoScreen> {
                   var result = await _todoService.saveTodo(todoObject);
                   if(result>0)
                     _showSuccessSnackBar('Created');
-              } : null             ,
+              } : null,
               style: ButtonStyle(
-                // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue), // Màu nền khi nút không được nhấn
-                // foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ khi nút không được nhấn
-                // overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Màu nền khi nút được nhấn
                 backgroundColor: MaterialStateProperty.all<Color>(
                   (todoTitleController.text.isNotEmpty &&
                       todoDescriptionController.text.isNotEmpty &&

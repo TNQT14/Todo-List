@@ -78,71 +78,107 @@ class _CategoriScreenState extends State<CategoriScreen> {
 
   //Show Form
   _showFormDialog(BuildContext context){
-    return showDialog(context: context, barrierDismissible: true, builder: (param){
-    return AlertDialog(
-      actions: <Widget>[
-        //Cancel Button
-        TextButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.red),
-            foregroundColor: MaterialStateProperty.all(
-                Colors.white,
-            ),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Cancel'),
-        ),
-        //Save Button
-        TextButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            foregroundColor: MaterialStateProperty.all(
-              Colors.white,
-            ),
-          ),
-          onPressed: () async{
-            print('Check _category');
-            _category.name = _categoriesNameController.text;
-            _category.description = _categoriesDescriptionController.text;
+    String categoryName = '';
+    String categoryDescription = '';
 
-            print('Check saveCategory');
-            var result = await _categoriesService.saveCategory(_category);
-            print('complete saveCategory');
-            // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
-            if(result>0)
-              {
-                _showSuccessSnackBar('Add successfull');
-                print('Kết quả $result');
-                getAllCategories();
+    _categoriesNameController.text = categoryName;
+    _categoriesDescriptionController.text = categoryDescription;
+
+    FocusNode categoryFonFocusNode = FocusNode();
+    return showDialog(context: context, barrierDismissible: true, builder: (param){
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return AlertDialog(
+          actions: <Widget>[
+            //Cancel Button
+            TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+                foregroundColor: MaterialStateProperty.all(
+                    Colors.white,
+                ),
+              ),
+              onPressed: () {
                 Navigator.pop(context);
-              }
-          },
-          child: Text('Save'),
-        ),
-      ],
-      title: const Text('Categories Form'),
-      content: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: _categoriesNameController,
-              decoration: InputDecoration(
-                hintText: 'Write a categories',
-                labelText: 'Category',
-              ),
+              },
+              child: Text('Cancel'),
             ),
-            TextField(
-              controller: _categoriesDescriptionController,
-              decoration: InputDecoration(
-                hintText: 'Write a Description',
-                labelText: 'Description',
+            //Save Button
+            TextButton(
+              // style: ButtonStyle(
+              //   backgroundColor: MaterialStateProperty.all(Colors.blue),
+              //   foregroundColor: MaterialStateProperty.all(
+              //     Colors.white,
+              //   ),
+              // ),
+              onPressed: (_categoriesNameController.text.isNotEmpty &&
+                  _categoriesDescriptionController.text.isNotEmpty)
+                  ? () async{
+                print('Check _category');
+                _category.name = _categoriesNameController.text;
+                _category.description = _categoriesDescriptionController.text;
+
+                print('Check saveCategory');
+                var result = await _categoriesService.saveCategory(_category);
+                print('complete saveCategory');
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoriScreen()));
+                if(result>0)
+                  {
+                    _showSuccessSnackBar('Add successfull');
+                    print('Kết quả $result');
+                    getAllCategories();
+                    Navigator.pop(context);
+                  }
+              }: null,
+              style: ButtonStyle(
+                // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue), // Màu nền khi nút không được nhấn
+                // foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ khi nút không được nhấn
+                // overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Màu nền khi nút được nhấn
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  (_categoriesNameController.text.isNotEmpty &&
+                      _categoriesDescriptionController.text.isNotEmpty )
+                      ? Colors.blue // Màu nền khi nút được nhấn
+                      : Colors.grey, // Màu xám khi nút không được nhấn
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ
+                overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Màu nền khi nút được nhấn
               ),
-              ),
+              child: Text('Save'),
+            ),
           ],
-        ),
-      ),
+          title: const Text('Categories Form'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: _categoriesNameController,
+                  decoration: InputDecoration(
+                    hintText: 'Write a categories',
+                    labelText: 'Category',
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      categoryName = value;
+                    });
+                  },
+                ),
+                TextField(
+                  controller: _categoriesDescriptionController,
+                  onChanged: (value) {
+                    setState(() {
+                      categoryDescription = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Write a Description',
+                    labelText: 'Description',
+                  ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      }
     );
     });
   }
