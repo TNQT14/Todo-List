@@ -12,4 +12,7 @@ class TodoService{
     return await _reponsitory.insertData('todo', todo.todoMap());
   }
 
+  readTodo() async{
+    return await _reponsitory.readData('todo');
+  }
 }

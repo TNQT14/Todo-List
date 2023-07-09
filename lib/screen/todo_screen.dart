@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:todolist/services/todo_service.dart';
 import 'package:todolist/model/todo.dart';
 
+import 'home_screen.dart';
+
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
 
@@ -79,6 +81,11 @@ class _TodoScreenState extends State<TodoScreen> {
     return Scaffold(
       key: _globalKey,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeScreen())),
+          color: Colors.white,
+        ),
         title: const Text('To do screen'),
       ),
       body: Column(
