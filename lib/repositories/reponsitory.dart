@@ -49,6 +49,7 @@ class Reponsitory{
   }
 
   deleteData(table, itemId) async {
+    print('Called deleteData($table, $itemId)');
     var connection = await database;
     await connection!.rawDelete('DELETE FROM $table WHERE ID = $itemId');
 

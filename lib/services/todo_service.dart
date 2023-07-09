@@ -21,6 +21,7 @@ class TodoService{
   }
 
   deleteTodo(todoId) async{
+    print('Call deleteTodo($todoId)');
     return await _reponsitory.deleteData('todo',todoId);
   }
 }
