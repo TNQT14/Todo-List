@@ -16,4 +16,6 @@ class DatabaseConnection{
     await database.execute("CREATE TABLE todo( id INTEGER PRIMARY KEY, title TEXT, description TEXT, category TEXT, todoDate TEXT, isFinished INTEGER)");
   }
 
+
+
 }

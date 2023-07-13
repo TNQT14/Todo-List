@@ -20,6 +20,10 @@ class TodoService{
     return await _reponsitory.readDataById('todo',todoId);
   }
 
+  readTodoByCategory(category) async{
+    return await _reponsitory.readDataByColumnName('todo', 'category', category);
+  }
+
   deleteTodo(todoId) async{
     print('Call deleteTodo($todoId)');
     return await _reponsitory.deleteData('todo',todoId);
