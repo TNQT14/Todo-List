@@ -8,6 +8,7 @@ class Todo{
   String? todoDate;
   int? isFinished;
 
+  Todo({this.id, this.title, this.description, this.category, this.todoDate, this.isFinished});
   todoMap(){
     var mapping = Map<String, dynamic>();
     mapping['id']=id;
